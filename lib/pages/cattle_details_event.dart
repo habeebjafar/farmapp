@@ -1,240 +1,234 @@
-import 'package:farmapp/models/cattle_model.dart';
-import 'package:farmapp/models/event_individual_model.dart';
-import 'package:farmapp/models/event_model.dart';
-
 import 'package:farmapp/pages/individual_event_form.dart';
+import 'package:farmapp/provider/cattle_provider.dart';
+import 'package:farmapp/provider/events_provider.dart';
 import 'package:farmapp/services/event_individual_service.dart';
 
-import 'package:farmapp/services/event_service.dart';
-
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class CattleDetailsEvent extends StatefulWidget {
-  final List<CattleModel> _list;
   final int index;
 
-  CattleDetailsEvent(this._list, this.index);
+  CattleDetailsEvent(this.index);
   @override
   _CattleDetailsEventState createState() => _CattleDetailsEventState();
 }
 
 class _CattleDetailsEventState extends State<CattleDetailsEvent> {
-  EventIndividualService _eventService = EventIndividualService();
-  List<EventIndividualModel> _list = [];
-  List<EventIndividualModel> _listSearch = [];
+  var provider;
+  var eventProvider;
 
   @override
   void initState() {
     super.initState();
-    _getAllIndividualEventRecord();
-    //_searchResearch();
+    provider = Provider.of<CattleProvider>(context, listen: false);
+    provider.getCattleById(this.widget.index);
+    eventProvider = Provider.of<EventsProvider>(context, listen: false);
+    eventProvider.getAllIndividualEventRecord(cattleId: this.widget.index);
   }
-
-  _getAllIndividualEventRecord() async {
-    var response = await _eventService.getAllEventRecord();
-    print(response);
-
-    response.forEach((data) {
-      setState(() {
-        var model = EventIndividualModel();
-
-        model.cattleId = data['cattleId'];
-        model.eventDate = data['eventDate'];
-        model.eventType = data['eventType'];
-        model.nameOfMedicine = data['nameOfMedicine'];
-        model.eventNotes = data['eventNotes'];
-        model.cattleTagNo = data['cattleTagNo'];
-
-        _list.add(model);
-
-        var searchTag = model.cattleTagNo.toString();
-      
-        if (searchTag ==
-            this.widget._list[this.widget.index].cattleTagNo.toString()) {
-          _listSearch.add(model);
-        }
-      });
-    });
-
-  
-  }
-
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _listSearch.isNotEmpty
-          ? ListView.builder(
-              padding: EdgeInsets.only(bottom: 70),
-              itemCount: _listSearch.length,
-              itemBuilder: (BuildContext context, int index) {
-                String med = _listSearch[index].eventType.toString();
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 3),
-                  child: Card(
-                    elevation: 5,
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(8, 16, 8, 16),
-                      child: Column(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.fromLTRB(2, 7, 0, 7),
-                            width: double.infinity,
-                            color: Theme.of(context).primaryColor,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: FutureBuilder(
+          future: eventProvider.getAllIndividualEventRecord(
+              cattleId: this.widget.index),
+          builder: (BuildContext context, snapShot) {
+            var dob = DateFormat('yyyy MMM, dd').format(
+                DateTime.parse("${provider.singleCattle[0]['cattleDOB']}"));
+            if (snapShot.connectionState == ConnectionState.waiting) {
+              return Scaffold(
+                body: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            } else {
+              // if (eventProvider.individualEventsList.length == 0) {
+              //   return Container(
+              //     child: Text("No data"),
+              //   );
+              // }
+
+              return Consumer<EventsProvider>(
+                builder: (_, eventProvider, __) =>  eventProvider.individualEventsList.length == 0 ? Center(
+          child: Text("No event recorded yet!",
+          style: TextStyle(
+            fontSize: 18,
+            color: Colors.orange
+          ),)
+        ) : ListView.builder(
+                    padding: EdgeInsets.only(bottom: 70),
+                    itemCount: eventProvider.individualEventsList.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      String med = eventProvider
+                          .individualEventsList[index].eventType
+                          .toString();
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 3),
+                        child: Card(
+                          elevation: 5,
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(8, 16, 8, 16),
+                            child: Column(
                               children: [
+                                Container(
+                                  padding: EdgeInsets.fromLTRB(2, 7, 0, 7),
+                                  width: double.infinity,
+                                  color: Theme.of(context).primaryColor,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Icon(
+                                            Icons.multitrack_audio_outlined,
+                                            color: Colors.white70,
+                                          ),
+                                          SizedBox(width: 10),
+                                          Text(
+                                            "${med == 'Other' ? eventProvider.individualEventsList[index].nameOfMedicine : eventProvider.individualEventsList[index].eventType}",
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ],
+                                      ),
+                                      popupMenuWidget(
+                                          index,
+                                          eventProvider
+                                              .individualEventsList[index].id)
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
                                 Row(
                                   children: [
-                                    Icon(
-                                      Icons.multitrack_audio_outlined,
-                                      color: Colors.white70,
-                                    ),
-                                    SizedBox(width: 10),
                                     Text(
-                                      "${med == 'Other' ? _listSearch[index].nameOfMedicine : _listSearch[index].eventType}",
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                                Icon(
-                                  Icons.more_vert,
-                                  color: Colors.white,
-                                )
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                "Date:",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black54,
-                                    fontSize: 18),
-                              ),
-                              SizedBox(
-                                width: 80,
-                              ),
-                              Text(
-                                "${_listSearch[index].eventDate}",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    color: Theme.of(context).primaryColor,
-                                    fontSize: 16),
-                              )
-                            ],
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                "Tag No:",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black54,
-                                    fontSize: 18),
-                              ),
-                              SizedBox(
-                                width: 80,
-                              ),
-                              Text(
-                                "${_listSearch[index].cattleTagNo}",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    color: Theme.of(context).primaryColor,
-                                    fontSize: 16),
-                              )
-                            ],
-                          ),
-                          med == "Vacination/Injection" ||
-                                  med == "Deworming" ||
-                                  med == "Treatment/Medication"
-                              ? SizedBox(
-                                  height: 15,
-                                )
-                              : Container(),
-                          med == "Vacination/Injection" ||
-                                  med == "Deworming" ||
-                                  med == "Treatment/Medication"
-                              ? Row(
-                                  children: [
-                                    Text(
-                                      "Medicine:",
+                                      "Date:",
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: Colors.black54,
                                           fontSize: 18),
                                     ),
                                     SizedBox(
-                                      width: 45,
+                                      width: 80,
                                     ),
                                     Text(
-                                      "${_listSearch[index].nameOfMedicine}",
+                                      "${eventProvider.individualEventsList[index].eventDate}",
                                       style: TextStyle(
                                           fontWeight: FontWeight.w600,
                                           color: Theme.of(context).primaryColor,
                                           fontSize: 16),
                                     )
                                   ],
-                                )
-                              : Container(),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Notes:",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black54,
-                                    fontSize: 18),
-                              ),
-                              SizedBox(
-                                width: 70,
-                              ),
-                              Container(
-                                width: 200,
-                                child: Text(
-                                  "${_listSearch[index].eventNotes}",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      color: Theme.of(context).primaryColor,
-                                      fontSize: 16),
                                 ),
-                              )
-                            ],
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      "Tag No:",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black54,
+                                          fontSize: 18),
+                                    ),
+                                    SizedBox(
+                                      width: 60,
+                                    ),
+                                    Text(
+                                      "${provider.singleCattle[0]['cattleTagNo']}",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          color: Theme.of(context).primaryColor,
+                                          fontSize: 16),
+                                    )
+                                  ],
+                                ),
+                                med == "Vacination/Injection" ||
+                                        med == "Deworming" ||
+                                        med == "Treatment/Medication"
+                                    ? SizedBox(
+                                        height: 15,
+                                      )
+                                    : Container(),
+                                med == "Vacination/Injection" ||
+                                        med == "Deworming" ||
+                                        med == "Treatment/Medication"
+                                    ? Row(
+                                        children: [
+                                          Text(
+                                            "Medicine:",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black54,
+                                                fontSize: 18),
+                                          ),
+                                          SizedBox(
+                                            width: 45,
+                                          ),
+                                          Text(
+                                            "${eventProvider.individualEventsList[index].nameOfMedicine}",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                                fontSize: 16),
+                                          )
+                                        ],
+                                      )
+                                    : Container(),
+                                SizedBox(
+                                  height: 15,
+                                ),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Notes:",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black54,
+                                          fontSize: 18),
+                                    ),
+                                    SizedBox(
+                                      width: 70,
+                                    ),
+                                    Container(
+                                      width: 200,
+                                      child: Text(
+                                        "${eventProvider.individualEventsList[index].eventNotes}",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                            fontSize: 16),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              })
-          : Center(
-              child: Text(
-                "No milk records entered yet!",
-                style: TextStyle(color: Colors.orange, fontSize: 18),
-              ),
-            ),
+                        ),
+                      );
+                    }),
+              );
+            }
+          }),
       floatingActionButton: GestureDetector(
         onTap: () {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => IndividualEventForm(
-                      this.widget._list, this.widget.index)));
+                  builder: (context) =>
+                      IndividualEventForm(index: this.widget.index)));
         },
         child: Container(
           width: 130,
@@ -261,5 +255,86 @@ class _CattleDetailsEventState extends State<CattleDetailsEvent> {
         ),
       ),
     );
+  }
+
+  Widget popupMenuWidget(index, id) {
+    var selectedValue;
+    return PopupMenuButton(
+        icon: Icon(
+          Icons.more_vert,
+          color: Colors.white,
+        ),
+        onSelected: (value) {
+          setState(() {
+            selectedValue = value as String;
+
+            if (selectedValue == "Edit Event") {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => IndividualEventForm(
+                          index: this.widget.index, eventIndex: index)));
+            } else if (selectedValue == "Delete") {
+              _deleteEventDialog(id);
+            }
+          });
+        },
+        itemBuilder: (_) => [
+              PopupMenuItem(value: "Edit Event", child: Text("Edit Event")),
+              PopupMenuItem(value: "Delete", child: Text("Delete")),
+            ]);
+  }
+
+  _deleteEventDialog(id) {
+    return showDialog(
+        context: context,
+        barrierDismissible: true,
+        useSafeArea: true,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              actions: <Widget>[
+                TextButton(
+                  style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.orange),
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    "CANCEL",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+                TextButton(
+                  style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.red),
+                  ),
+                  onPressed: () async {
+                    
+                    EventIndividualService service = EventIndividualService();
+                    var response = await service.deleteEventById(id);
+
+                    if (response > 0) {
+                      print("successfully deleted");
+                      await Provider.of<EventsProvider>(context, listen: false)
+                          .getAllIndividualEventRecord( cattleId: this.widget.index);
+                    } else {
+                      print("successfully failed");
+                    }
+
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    "DELETE",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ],
+              title: Text("Deleting Cattle!"),
+              content: Text(
+                  "This cattle will be deleted completely from the app. This will also permanently delete all records such milk, events, expenses and revenue attached to this cattle!"));
+        });
   }
 }

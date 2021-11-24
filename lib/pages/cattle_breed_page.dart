@@ -1,9 +1,11 @@
 import 'package:farmapp/models/cattle_breed_model.dart';
-import 'package:farmapp/models/cattle_model.dart';
-import 'package:farmapp/pages/cattle_form_page.dart';
+import 'package:farmapp/pages/cattle_breed_search_page.dart';
+import 'package:farmapp/provider/cattle_provider.dart';
 import 'package:farmapp/services/cattle_breed_service.dart';
-import 'package:farmapp/services/cattle_service.dart';
+
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CattleBreedPage extends StatefulWidget {
   @override
@@ -11,102 +13,89 @@ class CattleBreedPage extends StatefulWidget {
 }
 
 class _CattleBreedPageState extends State<CattleBreedPage> {
-  CattleService _cattleService = CattleService();
-  List<CattleModel> _list = [];
-
-  TextEditingController  _cattleBreedName = TextEditingController();
+  TextEditingController _incomeCategoryName = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _getAllCattles();
+    Provider.of<CattleProvider>(context, listen: false).getAllCattleBreeds();
   }
 
-  _getAllCattles() async {
-    var response = await _cattleService.getAllTCattles();
-     print(response);
+  _editCategoryDialog(BuildContext context, {int? id}) {
+    var cattleProvider = Provider.of<CattleProvider>(context, listen: false);
+    return showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (param) {
+          return AlertDialog(
+            actions: <Widget>[
+              TextButton(
+                style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Colors.orange),
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  "CANCEL",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+              TextButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(
+                      Theme.of(context).colorScheme.primary),
+                ),
+                onPressed: () async {
+                  CattleBreedService cattleBreedService = CattleBreedService();
+                  var model = CattleBreedModel();
+                  model.cattleBreed = _incomeCategoryName.text;
+                  var response;
+                  if (id != null) {
+                    model.id = id;
+                    response = await cattleBreedService.updateCattle(model);
+                    await cattleProvider
+                          .updateCattleSingleField("cattleBreedId", "cattleBreed", _incomeCategoryName.text, id);
+                  } else {
+                    response = await cattleBreedService.saveCattle(model);
+                  }
 
-    response.forEach((data) {
-      setState(() {
-        var model = CattleModel();
-        model.cattleName = data['cattleName'];
-        model.cattleTagNo = data['cattleTagNo'];
-        model.cattleGender = data['cattleGender'];
-        model.cattleBreed = data['cattleBreed'];
-        model.cattleWeight = data['cattleWeight'];
-        model.cattleDOB = data['cattleDOB'];
-        model.cattleDOE = data['cattleDOE'];
-        model.cattleObtainMethod = data['cattleObtainMethod'];
-        model.cattleMotherTagNo = data['cattleMotherTagNo'];
-        model.cattleFatherTagNo = data['cattleFatherTagNo'];
-        model.cattleNote = data['cattleNotes'];
-        
-        _list.add(model);
-      });
-    });
-  }
-
-
-   _editCategoryDialog(BuildContext context) {
-   return showDialog(context: context, barrierDismissible: true, builder: (param){
-     return AlertDialog(
-       actions: <Widget>[
-         TextButton(
-           style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(
-                        Colors.orange
-                        ),
+                  if (response > 0) {
+                    await cattleProvider.getAllCattleBreeds();
+                    print("added");
+                  } else {
+                    print("failed");
+                  }
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  "ADD",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ],
+            title: Text("New Breed"),
+            content: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  TextField(
+                    controller: _incomeCategoryName,
+                    style: TextStyle(fontSize: 20.0),
+                    decoration: InputDecoration(
+                        contentPadding:
+                            EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                        //hintText: "Cattle name. *",
+                        labelText: "Enter breed name ...",
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5.0))),
                   ),
-           onPressed:(){
-             Navigator.pop(context);
-           } ,
-           child: Text("CANCEL",
-           style: TextStyle(color: Colors.white),),
-         ),
-         TextButton(
-           style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(
-                        Theme.of(context).colorScheme.primary),
-                  ),
-           onPressed:() async {
-             CattleBreedService breedService = CattleBreedService();
-             var model = CattleBreedModel();
-             model.cattleBreed =  _cattleBreedName.text;
-             var response = await breedService.saveCattle(model);
-             if(response >0){
-               print("added successfully $response");
-             }else{
-               print("failed");
-             }
-              Navigator.pop(context);
-           } ,
-           child: Text("ADD",
-           style: TextStyle(color: Colors.white),),
-         ),
-       ],
-       title: Text("New Breed"), content: SingleChildScrollView(
-       child: Column(
-         children: <Widget>[
-           TextField(
-             controller: _cattleBreedName,
-               style: TextStyle(fontSize: 20.0),
-              decoration: InputDecoration(
-                  contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                  //hintText: "Cattle name. *",
-                  labelText: "Enter breed name ...",
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5.0))),
+                ],
+              ),
             ),
-           
-
-           
-         ],
-       ),
-
-     ),
-     );
-   });
- }
+          );
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -114,57 +103,60 @@ class _CattleBreedPageState extends State<CattleBreedPage> {
       appBar: AppBar(
         title: Text("Cattle Breeds"),
         actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.search)),
+          IconButton(onPressed: () {
+            Navigator.push(
+              context, MaterialPageRoute(builder: (context) => CattleBreedSearchPage()));
+          },
+           icon: Icon(Icons.search)),
           //IconButton(onPressed: () {}, icon: Icon(Icons.filter_list)),
         ],
       ),
-      body: ListView.builder(
-          itemCount: _list.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: Card(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(8, 12, 0, 12),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+      body: Consumer<CattleProvider> (
+          builder: (_, cattleProvider, __) => cattleProvider.list.length == 0 ? Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text("No cattle breeds have recorded yet!",
+            style: TextStyle(
+              fontSize: 18,
+              color: Colors.orange
+            ),),
+          )
+        ) : ListView.builder(
+              itemCount: cattleProvider.list.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: Card(
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(5, 2, 0, 2),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text("${_list[index].cattleBreed}",
-                              style: TextStyle(fontSize: 18,
-                              fontWeight: FontWeight.bold),),
+                              Text(
+                                "${cattleProvider.list[index].cattleBreed}",
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.w500),
+                              ),
                               SizedBox(
                                 height: 5,
                               ),
-                              Text("(2) Cattle")
+                              popupMenuWidget(cattleProvider.list[index].id,
+                                  cattleProvider.list[index].cattleBreed)
                             ],
                           ),
-                   
-                           
-                  Icon(Icons.more_vert)
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                );
+              }
+              )
               ),
-            );
-          }),
-      // Center(
-      //   child: Text(
-      //     "No cattle have been registered yet!",
-      //     style: TextStyle(
-      //       color: Colors.orange,
-      //       fontSize: 18
-      //     ),
-      //     ),
-      // ),
       floatingActionButton: GestureDetector(
         onTap: () {
+          _incomeCategoryName.clear();
           _editCategoryDialog(context);
         },
         child: Container(
@@ -192,5 +184,93 @@ class _CattleBreedPageState extends State<CattleBreedPage> {
         ),
       ),
     );
+  }
+
+  Widget popupMenuWidget(id, incomeName) {
+    var selectedValue;
+    return PopupMenuButton(
+        icon: Icon(
+          Icons.more_vert,
+          color: Colors.black,
+        ),
+        onSelected: (value) {
+          setState(() {
+            selectedValue = value as String;
+
+            if (selectedValue == "Edit Event") {
+              _incomeCategoryName.text = incomeName;
+
+              _editCategoryDialog(context, id: id);
+            } else if (selectedValue == "Delete") {
+              _deleteEventDialog(id, incomeName);
+            }
+          });
+        },
+        itemBuilder: (_) => [
+              PopupMenuItem(value: "Edit Event", child: Text("Edit Event")),
+              PopupMenuItem(value: "Delete", child: Text("Delete")),
+            ]);
+  }
+
+  _deleteEventDialog(id, incomeName) {
+    var cattleProvider = Provider.of<CattleProvider>(context, listen: false);
+    return showDialog(
+        context: context,
+        barrierDismissible: true,
+        useSafeArea: true,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              actions: <Widget>[
+                TextButton(
+                  style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.orange),
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    "CANCEL",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+                TextButton(
+                  style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.red),
+                  ),
+                  onPressed: () async {
+                   
+                    CattleBreedService cattleBreedService =
+                        CattleBreedService();
+                    var response =
+                        await cattleBreedService.deleteCattleBreedById(id);
+
+                    if (response > 0) {
+                      print("successfully deleted");
+                       await cattleProvider
+                          .updateCattleSingleField("cattleBreedId", "cattleBreed", "-", id);
+                      // if (delResponse > 0) {
+                      //   print("breed deleted");
+                      // } else {
+                      //   print("breed not deleted");
+                      // }
+                      await cattleProvider.getAllCattleBreeds();
+                    } else {
+                      print("successfully failed");
+                    }
+
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    "DELETE",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ],
+              title: Text("Deleting Cattle!"),
+              content: Text(
+                  "This cattle will be deleted completely from the app. This will also permanently delete all records such milk, events, expenses and revenue attached to this cattle!"));
+        });
   }
 }

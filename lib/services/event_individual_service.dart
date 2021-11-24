@@ -31,7 +31,7 @@ class EventIndividualService {
     
   }
 
-  deleteTodoById(eventModelId) async {
+  deleteEventById(eventModelId) async {
     return await _repository.deleteItemById("eventIndividual", eventModelId);
   }
 

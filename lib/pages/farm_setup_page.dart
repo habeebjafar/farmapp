@@ -1,5 +1,8 @@
 import 'package:farmapp/pages/cattle_breed_page.dart';
+import 'package:farmapp/pages/income_category_page.dart';
 import 'package:flutter/material.dart';
+
+import 'expense_category_page.dart';
 
 class FarmSetupPage extends StatefulWidget {
   
@@ -30,7 +33,7 @@ class _FarmSetupPageState extends State<FarmSetupPage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => CattleBreedPage()));
+                                builder: (context) => IncomeCategoryPage()));
                       },
                       child: Card(
                         elevation: 10,
@@ -63,36 +66,44 @@ class _FarmSetupPageState extends State<FarmSetupPage> {
                             )),
                       ),
                     ),
-                    Card(
-                      elevation: 10,
-                      child: Container(
-                          width: 160,
-                          height: 140,
-                          child: Center(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                  "assets/images/profits.png",
-                                  width: 80,
-                                  height: 80,
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Text(
-                                  "Expense \n Categories",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w800,
-                                    
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ExpenseCategoryPage()));
+                      },
+                      child: Card(
+                        elevation: 10,
+                        child: Container(
+                            width: 160,
+                            height: 140,
+                            child: Center(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    "assets/images/profits.png",
+                                    width: 80,
+                                    height: 80,
                                   ),
-                                   textAlign: TextAlign.center
-                                )
-                              ],
-                            ),
-                          )),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    "Expense \n Categories",
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w800,
+                                      
+                                    ),
+                                     textAlign: TextAlign.center
+                                  )
+                                ],
+                              ),
+                            )),
+                      ),
                     ),
                   ],
                 ),
@@ -100,7 +111,7 @@ class _FarmSetupPageState extends State<FarmSetupPage> {
                  SizedBox(height: 10,),
 
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     GestureDetector(
@@ -121,7 +132,7 @@ class _FarmSetupPageState extends State<FarmSetupPage> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Image.asset(
-                                    "assets/images/breed.png",
+                                    "assets/images/cattle.jpg",
                                     width: 80,
                                     height: 80,
                                   ),
@@ -142,6 +153,8 @@ class _FarmSetupPageState extends State<FarmSetupPage> {
                             )),
                       ),
                     ),
+                    Container( width: 160,
+                            height: 140,)
                    
                   ],
                 ),

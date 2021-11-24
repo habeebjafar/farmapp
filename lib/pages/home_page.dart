@@ -1,11 +1,15 @@
 import 'package:farmapp/pages/cattle_page.dart';
 import 'package:farmapp/pages/event_page.dart';
+import 'package:farmapp/pages/events_report_page.dart';
+import 'package:farmapp/pages/farm_notes.dart';
 import 'package:farmapp/pages/farm_setup_page.dart';
 import 'package:farmapp/pages/login_page.dart';
 import 'package:farmapp/pages/milk_record_page.dart';
+import 'package:farmapp/pages/milk_report_page.dart';
 import 'package:farmapp/pages/report_page.dart';
 import 'package:farmapp/pages/transaction_page.dart';
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -75,44 +79,54 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 ListTile(
-                  leading: Icon(Icons.bookmark),
+                  leading: Icon(Icons.my_library_books),
                   title: Text('Milk Report'),
-                  selected: _selectedDestination == 3,
-                  // onTap: () => selectDestination(3),
-                ),
-                ListTile(
-                  leading: Icon(Icons.delete),
-                  title: Text('Event Report'),
-                  selected: _selectedDestination == 1,
-                  //onTap: () => selectDestination(1),
-                ),
-                ListTile(
-                  leading: Icon(Icons.label),
-                  title: Text('Back & Restore'),
-                  selected: _selectedDestination == 2,
-                  //onTap: () => selectDestination(2),
-                ),
-
-                Divider(
-                  height: 1,
-                  thickness: 2,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text(
-                    'Farm Account',
-                  ),
-                ),
-                ListTile(
-                  leading: Icon(Icons.bookmark),
-                  title: Text('Login Or create Account'),
                   selected: _selectedDestination == 3,
                   onTap: () {
                     Navigator.pop(context);
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => LoginPage()));
+                        MaterialPageRoute(builder: (context) => MilkReportPage()));
+                  },
+                  // onTap: () => selectDestination(3),
+                ),
+                ListTile(
+                  leading: Icon(Icons.event),
+                  title: Text('Event Report'),
+                  selected: _selectedDestination == 1,
+                  //onTap: () => selectDestination(1),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => EventsReportPage()));
                   },
                 ),
+                // ListTile(
+                //   leading: Icon(Icons.label),
+                //   title: Text('Back & Restore'),
+                //   selected: _selectedDestination == 2,
+                //   //onTap: () => selectDestination(2),
+                // ),
+
+                // Divider(
+                //   height: 1,
+                //   thickness: 2,
+                // ),
+                // Padding(
+                //   padding: const EdgeInsets.all(16.0),
+                //   child: Text(
+                //     'Farm Account',
+                //   ),
+                // ),
+                // ListTile(
+                //   leading: Icon(Icons.bookmark),
+                //   title: Text('Login Or create Account'),
+                //   selected: _selectedDestination == 3,
+                //   onTap: () {
+                //     Navigator.pop(context);
+                //     Navigator.push(context,
+                //         MaterialPageRoute(builder: (context) => LoginPage()));
+                //   },
+                // ),
 
                 Divider(
                   height: 1,
@@ -121,24 +135,60 @@ class _HomePageState extends State<HomePage> {
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Text(
-                    'Settings',
+                    'Preferences',
                   ),
                 ),
+
+                   // ListTile(
+                //   leading: Icon(Icons.bookmark),
+                //   title: Text('Settings'),
+                //   selected: _selectedDestination == 3,
+                //   // onTap: () => selectDestination(3),
+                // ),
+
+                   // ListTile(
+                //   leading: Icon(Icons.bookmark),
+                //   title: Text('Reminders'),
+                //   selected: _selectedDestination == 3,
+                //   // onTap: () => selectDestination(3),
+                // ),
+
                 ListTile(
-                  leading: Icon(Icons.bookmark),
-                  title: Text('Reminders'),
+                  leading:  Icon(Icons.note),
+                  title: Text('Farm Notes'),
                   selected: _selectedDestination == 3,
-                  // onTap: () => selectDestination(3),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => FarmNote()));
+                  },
+                 
                 ),
+
                 ListTile(
-                  leading: Icon(Icons.delete),
-                  title: Text('Event Report'),
+                  leading: Icon(Icons.share_sharp),
+                  title: Text('Share Via Whatsapp'),
                   selected: _selectedDestination == 1,
-                  //onTap: () => selectDestination(1),
+                  onTap: (){
+                     Navigator.pop(context);
+                    Share.share('check out my website https://example.com', subject: 'Look what I made!');
+                  }
                 ),
                 ListTile(
-                  leading: Icon(Icons.label),
-                  title: Text('Backup & Restore'),
+                  leading: Icon(Icons.policy),
+                  title: Text('Privacy Policy'),
+                  selected: _selectedDestination == 2,
+                  //onTap: () => selectDestination(2),
+                ),
+                ListTile(
+                  leading: Icon(Icons.help),
+                  title: Text('User Guide/Manual'),
+                  selected: _selectedDestination == 2,
+                  //onTap: () => selectDestination(2),
+                ),
+                ListTile(
+                  leading: Icon(Icons.feedback),
+                  title: Text('Help & Feedback'),
                   selected: _selectedDestination == 2,
                   //onTap: () => selectDestination(2),
                 ),

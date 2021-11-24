@@ -1,5 +1,7 @@
-import 'package:farmapp/pages/cattle_breed_page.dart';
+import 'package:farmapp/pages/events_report_page.dart';
+import 'package:farmapp/pages/milk_report_page.dart';
 import 'package:farmapp/pages/pie_chart_page.dart';
+import 'package:farmapp/pages/transactions_report_page.dart';
 import 'package:flutter/material.dart';
 
 class ReportPage extends StatefulWidget {
@@ -31,13 +33,14 @@ class _ReportPageState extends State<ReportPage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => CattleBreedPage()));
+                                builder: (context) => TransactionReportPage()));
                       },
                       child: Card(
                         elevation: 10,
                         child: Container(
                             width: 160,
                             height: 140,
+                             color: Colors.orange,
                             child: Center(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -52,9 +55,10 @@ class _ReportPageState extends State<ReportPage> {
                                     height: 10,
                                   ),
                                   Text(
-                                    "Income \n Categories",
+                                    "Transactions",
                                     style: TextStyle(
                                       fontSize: 18,
+                                      color: Colors.white,
                                        fontWeight: FontWeight.w800,
                                     ),
                                      textAlign: TextAlign.center
@@ -64,36 +68,49 @@ class _ReportPageState extends State<ReportPage> {
                             )),
                       ),
                     ),
-                    Card(
-                      elevation: 10,
-                      child: Container(
-                          width: 160,
-                          height: 140,
-                          child: Center(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                  "assets/images/profits.png",
-                                  width: 80,
-                                  height: 80,
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Text(
-                                  "Expense \n Categories",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w800,
-                                    
+                    GestureDetector(
+
+                         onTap: () {
+                        
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MilkReportPage()));
+                      },
+
+                      child: Card(
+                        elevation: 10,
+                        child: Container(
+                            width: 160,
+                            height: 140,
+                            color: Theme.of(context).primaryColor,
+                            child: Center(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    "assets/images/milk.png",
+                                    width: 80,
+                                    height: 80,
                                   ),
-                                   textAlign: TextAlign.center
-                                )
-                              ],
-                            ),
-                          )),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    "Milk Report",
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w800,
+                                      
+                                    ),
+                                     textAlign: TextAlign.center
+                                  )
+                                ],
+                              ),
+                            )),
+                      ),
                     ),
                   ],
                 ),
@@ -116,13 +133,14 @@ class _ReportPageState extends State<ReportPage> {
                         child: Container(
                             width: 160,
                             height: 140,
+                            color: Theme.of(context).primaryColor,
                             child: Center(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Image.asset(
-                                    "assets/images/breed.png",
+                                    "assets/images/cow3.png",
                                     width: 80,
                                     height: 80,
                                   ),
@@ -133,6 +151,7 @@ class _ReportPageState extends State<ReportPage> {
                                     "Cattle Report",
                                     style: TextStyle(
                                       fontSize: 18,
+                                      color: Colors.white,
                                       fontWeight: FontWeight.w800,
                                       
                                     ),
@@ -149,20 +168,21 @@ class _ReportPageState extends State<ReportPage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => CattleBreedPage()));
+                                builder: (context) => EventsReportPage()));
                       },
                       child: Card(
                         elevation: 10,
                         child: Container(
                             width: 160,
                             height: 140,
+                            color: Colors.orange,
                             child: Center(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Image.asset(
-                                    "assets/images/breed.png",
+                                    "assets/images/notes.png",
                                     width: 80,
                                     height: 80,
                                   ),
@@ -173,6 +193,7 @@ class _ReportPageState extends State<ReportPage> {
                                     "Events Report",
                                     style: TextStyle(
                                       fontSize: 18,
+                                      color: Colors.white,
                                       fontWeight: FontWeight.w800,
                                       
                                     ),

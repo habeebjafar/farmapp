@@ -25,7 +25,7 @@ class MilkService {
     return await _repository.getItemById("milk", milkModelId);
   }
 
-  updateTodo(MilkModel milkModel) async {
+  updateMilk(MilkModel milkModel) async {
     return await _repository.updateItem("milk", milkModel.createMap());
     
   }

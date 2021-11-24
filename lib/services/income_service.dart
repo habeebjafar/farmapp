@@ -25,12 +25,17 @@ class IncomeService {
     return await _repository.getItemById("income", incomeId);
   }
 
-  updateTodo(IncomeModel incomeId) async {
+  updateIncome(IncomeModel incomeId) async {
     return await _repository.updateItem("income", incomeId.createMap());
     
   }
 
-  deleteTodoById(incomeId) async {
+   updateIncomeSingleField(conditionalColumn, colunmName, colunmValue, id) async{
+
+    return await _repository.updateSingleField("income", conditionalColumn, colunmName, colunmValue, id);
+  }
+
+  deleteSaveById(incomeId) async {
     return await _repository.deleteItemById("income", incomeId);
   }
 

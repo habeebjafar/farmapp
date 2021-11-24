@@ -1,30 +1,38 @@
-import 'package:farmapp/models/cattle_model.dart';
-import 'package:farmapp/pages/cattle_page.dart';
+
+
+import 'package:farmapp/models/cattle_breed_model.dart';
+import 'package:farmapp/provider/cattle_provider.dart';
 import 'package:farmapp/services/cattle_breed_service.dart';
-import 'package:farmapp/services/cattle_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class CattleFormPage extends StatefulWidget {
+  final int index;
+
+  CattleFormPage(this.index);
+
   @override
   _CattleFormPageState createState() => _CattleFormPageState();
 }
 
 class _CattleFormPageState extends State<CattleFormPage> {
-  var _categories = <DropdownMenuItem>[];
+   GlobalKey<FormState> globalKey = GlobalKey<FormState>();
+
+  var provider;
+  var cattleBreedId;
 
   @override
   void initState() {
     super.initState();
+    provider = Provider.of<CattleProvider>(context, listen: false);
+
+    if (this.widget.index != -1) {
+      provider.getCattleById(this.widget.index);
+    }
+
     _getAllCattleBreed();
-    _loadCategories();
-  }
-
-  var response;
-
-  _getAllCattleBreed() async {
-    CattleBreedService service = CattleBreedService();
-    response = await service.getAllTCattleBreeds();
+    editvalue();
   }
 
   TextEditingController cattleNameController = TextEditingController();
@@ -36,36 +44,6 @@ class _CattleFormPageState extends State<CattleFormPage> {
   TextEditingController cattleFatherTagNoController = TextEditingController();
   TextEditingController cattleNotesController = TextEditingController();
   TextEditingController sourceOfCattleController = TextEditingController();
-
-  CattleService _cattleService = CattleService();
-  List<String> mylist = [];
-
-  List<DropdownMenuItem<String>> get dropdownItems {
-    // CattleBreedService service = CattleBreedService();
-    //  var response =  service.getAllTCattleBreeds();
-
-    //   response.forEach((category){
-
-    //   setState(() {
-    //     response.add(DropdownMenuItem(child: Text(category['cattleBreed']), value: Text(category['cattleBreed']),));
-
-    //   });
-
-    // });
-
-    List<DropdownMenuItem<String>> menuItems = [
-      DropdownMenuItem(
-          child: Text("--Select the cattle's breed--"),
-          value: "--Select the cattle's breed--"),
-      DropdownMenuItem(child: Text("Friesian"), value: "Friesian"),
-      DropdownMenuItem(child: Text("Brazil"), value: "Brazil"),
-      DropdownMenuItem(child: Text("Zoto"), value: "Zoto"),
-      DropdownMenuItem(
-          child: Text("Other (specify)"), value: "Other (specify)"),
-    ];
-
-    return menuItems;
-  }
 
   List<DropdownMenuItem<String>> get dropdownItemsTwo {
     List<DropdownMenuItem<String>> menuItems = [
@@ -91,15 +69,11 @@ class _CattleFormPageState extends State<CattleFormPage> {
     return menuItems;
   }
 
-  //String cattleStageThree = "";
-  //String cattleStageFour = "";
-
-  String selectedValue = "--Select the cattle's breed--";
   String selectedValueTwo = "Select Gender. *";
   String selectedValueObtainMethod = "Select how cattle was obtained. *";
-  String selectedValueCattleStage  = "-Select cattle stage";
-  String selectedValueCattleStageThree  = "-Select cattle stage.-";
-  String selectedValueCattleStageFour  = "-Select cattle stage-";
+  String selectedValueCattleStage = "-Select cattle stage";
+  String selectedValueCattleStageThree = "-Select cattle stage.-";
+  String selectedValueCattleStageFour = "-Select cattle stage-";
 
   List<DropdownMenuItem<String>> menuItemsStage3 = [
     DropdownMenuItem(
@@ -120,13 +94,6 @@ class _CattleFormPageState extends State<CattleFormPage> {
   ];
 
   List<DropdownMenuItem<String>> get dropdownItemsCattleStage {
-    // if (selectedValueTwo == "Male") {
-    //                 cattleStageThree = "Steer";
-    //                 cattleStageFour = "Bull";
-    //               } else if (selectedValueTwo == "Female") {
-    //                 cattleStageThree = "Heifer";
-    //                 cattleStageFour = "Cow";
-    //               }
     var menuItems;
 
     setState(() {
@@ -140,15 +107,9 @@ class _CattleFormPageState extends State<CattleFormPage> {
     return menuItems;
   }
 
-
-
- // var _cattleBreedList = <DropdownMenuItem>[];
-
   DateTime _date = DateTime.now();
 
   _selectTodoDate(BuildContext context, int? i) async {
-    //mylist.last = "hello";
-
     var _pickDate = await showDatePicker(
         context: context,
         initialDate: _date,
@@ -166,68 +127,182 @@ class _CattleFormPageState extends State<CattleFormPage> {
     }
   }
 
-  _saveCattle() async {
-    var model = CattleModel();
-    model.cattleBreed = selectedValue.toString();
-    model.cattleName = cattleNameController.text;
-    model.cattleTagNo = cattleTagNoController.text;
-    model.cattleGender = selectedValueTwo.toString();
-    model.cattleStage = selectedValueCattleStage.toString();
-    model.cattleWeight = cattleWeightController.text;
-    model.cattleDOB = cattleDOBController.text;
-    model.cattleDOE = cattleDOEController.text;
-    model.cattleObtainMethod = selectedValueObtainMethod == "Other"
-        ? sourceOfCattleController.text
-        : selectedValueObtainMethod.toString();
-    model.cattleMotherTagNo = cattleMotherTagNoController.text;
-    model.cattleFatherTagNo = cattleFatherTagNoController.text;
-    model.cattleNote = cattleNotesController.text;
+  // TimeOfDay _date = TimeOfDay.now();
+  
 
-    var response = await _cattleService.saveCattle(model);
+  // _selectTodoDate(BuildContext context, int? i) async {
+  //   var _pickDate = await showTimePicker(
+  //       context: context,
+  //       initialTime: _date,
 
-    if (response > 0) {
-      print("added successfully $response");
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (_) => CattlePage()));
-    } else {
-      print("no value added");
+  //      // firstDate: DateTime(2000),
+  //      // lastDate: DateTime(2099)
+  //      );
+  //   if(_pickDate != null) {
+  //     setState(() {
+  //       _date = _pickDate;
+  //       if (i == 1) {
+  //         cattleDOBController.text = _pickDate.format(context);
+  //       } else {
+  //         cattleDOEController.text =  _pickDate.format(context);
+  //       }
+  //     });
+  //   }
+  // }
+
+  String dropdownvalue = "--Select the cattle's breed--";
+
+  CattleBreedService _cattleBreedService = CattleBreedService();
+  //List<CattleBreedModel> _list = [];
+  List<String> newItems = [];
+  List<String> breedIdList = [];
+  var checkValue;
+ // var newDropdownvalue;
+
+  _getAllCattleBreed() async {
+    var response = await _cattleBreedService.getAllTCattleBreeds();
+    //print(response);
+
+    response.forEach((data) {
+      setState(() {
+        var model = CattleBreedModel();
+
+        model.id = data['id'];
+        model.cattleBreed = data['cattleBreed'];
+
+        newItems.add(model.cattleBreed.toString());
+        breedIdList.add(model.id.toString());
+      });
+
+    });
+
+    //newItems.sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
+
+    setState(() {
+      newItems.insert(0, "--Select the cattle's breed--");
+      newItems.insert(newItems.length, "Other (Specify)");
+      breedIdList.insert(0, "0");
+      breedIdList.insert(breedIdList.length, "1000000");
+      dropdownvalue = this.widget.index != -1
+              ? provider.singleCattle[0]['cattleBreed']!
+              : newItems.first.toString();
+     // cattleBreedId = breedIdList[newItems.indexOf(dropdownvalue)];
+    });
+
+  }
+
+  editvalue() async {
+    await provider.getCattleById(this.widget.index);
+    if (this.widget.index != -1) {
+      var cattleBreed = provider.singleCattle[0]['cattleBreed'].toString();
+      setState(() {
+        cattleDOBController.text =
+            provider.singleCattle[0]['cattleDOB'].toString();
+        cattleDOEController.text =
+            provider.singleCattle[0]['cattleDOE'].toString();
+        cattleNameController.text =
+            provider.singleCattle[0]['cattleName'].toString();
+        dropdownvalue = cattleBreed == "-" ? "--Select the cattle's breed--" : cattleBreed;
+         cattleBreedId = provider.singleCattle[0]['cattleBreedId'].toString();
+        selectedValueTwo = provider.singleCattle[0]['cattleGender'].toString();
+        cattleWeightController.text =
+            provider.singleCattle[0]['cattleWeight'].toString();
+        selectedValueObtainMethod =
+            provider.singleCattle[0]['cattleObtainMethod'].toString();
+        sourceOfCattleController.text =
+            provider.singleCattle[0]['cattleOtherSource'].toString();
+        cattleMotherTagNoController.text =
+            provider.singleCattle[0]['cattleMotherTagNo'].toString();
+        cattleFatherTagNoController.text =
+            provider.singleCattle[0]['cattleFatherTagNo'].toString();
+        cattleNotesController.text =
+            provider.singleCattle[0]['cattleNotes'].toString();
+        selectedValueCattleStage =
+            provider.singleCattle[0]['cattleStage'].toString();
+        cattleMotherTagNoController.text =
+            provider.singleCattle[0]['cattleMotherTagNo'].toString();
+        cattleTagNoController.text =
+            provider.singleCattle[0]['cattleTagNo'].toString();
+      });
     }
   }
+  
+        bool validateAndSave() {
+    final form = globalKey.currentState;
+    if (form!.validate() && !dropdownvalue.contains("--Select the cattle's breed--") &&
+    !selectedValueTwo.contains("Select Gender. *") && 
+    !selectedValueCattleStage.contains("-Select cattle stage") &&
+    !selectedValueObtainMethod.contains("Select how cattle was obtained. *")) {
+      form.save();
+      return true;
+    }
 
-  _loadCategories() async {
-    CattleBreedService service = CattleBreedService();
+    final snackBar = SnackBar(
+      content: const Text('Please fill all the fields marked with (*)'),
 
-    var response = await service.getAllTCattleBreeds();
+      duration: Duration(seconds: 2),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
-    response.forEach((category) {
-      setState(() {
-        _categories.add(DropdownMenuItem(
-          child: Text(category['cattleBreed']),
-          value: Text(category['cattleBreed']),
-        ));
-      });
-    });
+    return false;
   }
-
-  String dropdownvalue = 'Apple';
-  List<String> items = [
-    'Apple',
-    'Banana',
-    'Grapes',
-    'Orange',
-    'watermelon',
-    'Pineapple'
-  ];
 
   @override
   Widget build(BuildContext context) {
+    provider = Provider.of<CattleProvider>(context, listen: false);
+    var cattlestatus =
+        selectedValueTwo.toString() == "Female" ? "Non Lactating" : "";
+
     return Scaffold(
       appBar: AppBar(
         title: Text("New Cattle"),
         actions: [
           IconButton(
-              onPressed: () {
-                _saveCattle();
+              onPressed: () async {
+                if(checkValue ==1){
+                  setState(() {
+                    cattleBreedId = breedIdList[newItems.indexOf(dropdownvalue)];
+                  });
+                }
+
+                if(validateAndSave()){
+
+                       await provider.saveCattle(
+                    dropdownvalue,
+                  cattleBreedId,
+                    cattleNameController.text,
+                    selectedValueTwo,
+                    cattleTagNoController.text,
+                    selectedValueCattleStage,
+                    cattleWeightController.text,
+                    cattleDOBController.text,
+                    cattleDOEController.text,
+                    selectedValueObtainMethod,
+                    sourceOfCattleController.text,
+                    cattleMotherTagNoController.text,
+                    cattleFatherTagNoController.text,
+                    cattleNotesController.text,
+                    cattlestatus,
+                    "All Active",
+                    "",
+                    "",
+                    "",
+                    "",
+                    this.widget.index != -1
+                        ? provider.singleCattle[0]['id']!
+                        : -1,
+                    this.widget.index);
+
+                if (provider.isSave) {
+                  await provider.getAllCattles("All Active");
+                  Navigator.pop(context);
+                }
+
+
+                }
+           
+              
+
               },
               icon: Icon(
                 Icons.gpp_good,
@@ -236,53 +311,14 @@ class _CattleFormPageState extends State<CattleFormPage> {
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(10),
-        child: Column(
-          children: [
-            SizedBox(
-              height: 20,
-            ),
-
-            // DropdownButton(
-            //   style: TextStyle(),
-            //   value: dropdownvalue,
-            //   icon: Icon(Icons.keyboard_arrow_down),
-            //   items: items.map((String items) {
-            //     return DropdownMenuItem(value: items, child: Text(items));
-            //   }).toList(),
-            //   onChanged: (String? newValue) {
-            //     setState(() {
-            //       dropdownvalue = newValue!;
-            //     });
-            //   },
-            // ),
-
-            //  DropdownButtonFormField(
-            //     value: _selectedValue,
-            //     items: _categories,
-            //     hint:Text("Select one category") ,
-            //     onChanged: (value){
-            //       setState(() {
-            //         _selectedValue = value;
-            //       });
-
-            //     },
-
-            //   ),
-
-            DropdownButtonFormField(
-                // decoration: InputDecoration(
-                //   enabledBorder: OutlineInputBorder(
-                //     borderSide: BorderSide(color: Colors.blue, width: 2),
-                //     borderRadius: BorderRadius.circular(20),
-                //   ),
-                //   border: OutlineInputBorder(
-                //     borderSide: BorderSide(color: Colors.blue, width: 2),
-                //     borderRadius: BorderRadius.circular(20),
-                //   ),
-                //   //filled: true,
-                //   //fillColor: Colors.blueAccent,
-                // ),
-
+        child: Form(
+          key: globalKey,
+          child: Column(
+            children: [
+              SizedBox(
+                height: 20,
+              ),
+              DropdownButtonFormField(
                 style: TextStyle(fontSize: 16.0, color: Colors.black),
                 icon: Icon(
                   Icons.arrow_drop_down,
@@ -294,287 +330,348 @@ class _CattleFormPageState extends State<CattleFormPage> {
                     //labelText: "--Select the cattle's breed--",
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5.0))),
-                //dropdownColor: Colors.blueAccent,
-                value: selectedValue,
+                value: dropdownvalue,
+                //icon: Icon(Icons.keyboard_arrow_down),
+                items: newItems.map((String items) {
+                  return DropdownMenuItem(value: items, child: Text(items));
+                }).toList(),
                 onChanged: (String? newValue) {
                   setState(() {
-                    selectedValue = newValue!;
-                  });
-                },
-                items: dropdownItems),
-
-            SizedBox(
-              height: 20,
-            ),
-
-            // DropdownButtonFormField(
-            //   value: _selectedValue,
-            //   items: _cattleBreedList,
-            //   hint: Text("Select one category"),
-            //   onChanged: (value) {
-            //     setState(() {
-            //       _selectedValue = value;
-            //     });
-            //   },
-            //   decoration: InputDecoration(
-            //       contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-            //       //hintText: "Cattle name. *",
-            //       labelText: "Select the cattle's breed. *",
-            //       border: OutlineInputBorder(
-            //           borderRadius: BorderRadius.circular(5.0))),
-            // ),
-
-            // TextField(
-            //   controller: cattleBreedController,
-            //   style: TextStyle(fontSize: 20.0),
-            //   decoration: InputDecoration(
-            //       contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-            //       //hintText: "Cattle name. *",
-            //       labelText: "Select the cattle's breed. *",
-            //       border: OutlineInputBorder(
-            //           borderRadius: BorderRadius.circular(5.0))),
-            // ),
-            // SizedBox(
-            //   height: 20,
-            // ),
-            TextField(
-              controller: cattleNameController,
-              style: TextStyle(fontSize: 20.0),
-              decoration: InputDecoration(
-                  contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                  //hintText: "Cattle name. *",
-                  labelText: "Cattle name. *",
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5.0))),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            TextField(
-              controller: cattleTagNoController,
-              style: TextStyle(fontSize: 20.0),
-              decoration: InputDecoration(
-                  contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                  //hintText: "Cattle name. *",
-                  labelText: "Tag No. *",
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5.0))),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-
-            DropdownButtonFormField(
-                style: TextStyle(fontSize: 16.0, color: Colors.black),
-                icon: Icon(
-                  Icons.arrow_drop_down,
-                  size: 30,
-                ),
-                decoration: InputDecoration(
-                    contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                    //hintText: "Cattle name. *",
-                    //labelText: "Select Gender. *",
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0))),
-                //dropdownColor: Colors.blueAccent,
-                value: selectedValueTwo,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    selectedValueTwo = newValue!;
-                    if(selectedValueTwo == "Male"){
-                       selectedValueCattleStage = selectedValueCattleStageThree;
-
-                    }else if(selectedValueTwo == "Female"){
-                       selectedValueCattleStage = selectedValueCattleStageFour;
-
+                    dropdownvalue = newValue!;
+                    if (dropdownvalue == "Other (Specify)") {
+                      _editCategoryDialog(context);
                     }
-                   
+        
+                    print(newItems.indexOf(dropdownvalue));
+                    cattleBreedId = breedIdList[newItems.indexOf(dropdownvalue)];
+                    print("checking out $cattleBreedId");
                   });
+        
+                  // print(newItems.indexOf(dropdownvalue));
+                  //  cattleBreedId = breedIdList[newItems.indexOf(dropdownvalue)];
+                  // print("checking out $cattleBreedId");
                 },
-                items: dropdownItemsTwo),
-
-            selectedValueTwo == "Select Gender. *"
-                ? Container()
-                : SizedBox(
-                    height: 20,
-                  ),
-
-            selectedValueTwo == "Select Gender. *"
-                ? Container()
-                : DropdownButtonFormField(
-                    style: TextStyle(fontSize: 16.0, color: Colors.black),
-                    icon: Icon(
-                      Icons.arrow_drop_down,
-                      size: 30,
-                    ),
-                    decoration: InputDecoration(
-                        contentPadding:
-                            EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                        //hintText: "Cattle name. *",
-                        //labelText: "Select Gender. *",
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5.0))),
-                    //dropdownColor: Colors.blueAccent,
-                    value: selectedValueCattleStage,
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        selectedValueCattleStage = newValue!;
-                      });
-                    },
-                    items: dropdownItemsCattleStage),
-
-            SizedBox(
-              height: 20,
-            ),
-
-            TextField(
-              controller: cattleWeightController,
-              style: TextStyle(fontSize: 20.0),
-              decoration: InputDecoration(
-                  contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                  //hintText: "Cattle name. *",
-                  labelText: "Weight",
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5.0))),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            TextField(
-              controller: cattleDOBController,
-              onTap: () {
-                _selectTodoDate(context, 1);
-              },
-              readOnly: true,
-              autofocus: false,
-              // enabled: false,
-              decoration: InputDecoration(
-                  //hintText: 'YY-MM-DD',
-
-                  labelText: 'Date of birth',
-                  contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5.0)),
-                  prefixIcon: InkWell(
-                      onTap: () {
-                        //  _selectTodoDate(context);
-                      },
-                      child: Icon(Icons.calendar_today))),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            TextField(
-              controller: cattleDOEController,
-              onTap: () {
-                _selectTodoDate(context, 0);
-              },
-              readOnly: true,
-              autofocus: false,
-              // enabled: false,
-              decoration: InputDecoration(
-                  //hintText: 'YY-MM-DD',
-
-                  labelText: 'Date of entry on the farm',
-                  contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5.0)),
-                  prefixIcon: InkWell(
-                      onTap: () {
-                        //  _selectTodoDate(context);
-                      },
-                      child: Icon(Icons.calendar_today))),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-
-            DropdownButtonFormField(
-                style: TextStyle(fontSize: 16.0, color: Colors.black),
-                icon: Icon(
-                  Icons.arrow_drop_down,
-                  size: 30,
-                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              TextFormField(
+                controller: cattleNameController,
+                validator: (input) => input!.length < 1 ? "Required" : null,
+                style: TextStyle(fontSize: 20.0),
                 decoration: InputDecoration(
                     contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
                     //hintText: "Cattle name. *",
-                    //labelText: "Select Gender. *",
+                    labelText: "Cattle name. *",
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5.0))),
-                //dropdownColor: Colors.blueAccent,
-                value: selectedValueObtainMethod,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    selectedValueObtainMethod = newValue!;
-                  });
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              TextFormField(
+                controller: cattleTagNoController,
+                validator: (input) => input!.length < 1 ? "Required" : null,
+                style: TextStyle(fontSize: 20.0),
+                decoration: InputDecoration(
+                    contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                    //hintText: "Cattle name. *",
+                    labelText: "Tag No. *",
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0))),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              DropdownButtonFormField(
+                  style: TextStyle(fontSize: 16.0, color: Colors.black),
+                  icon: Icon(
+                    Icons.arrow_drop_down,
+                    size: 30,
+                  ),
+                  decoration: InputDecoration(
+                      contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                      //hintText: "Cattle name. *",
+                      //labelText: "Select Gender. *",
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5.0))),
+                  //dropdownColor: Colors.blueAccent,
+                  value: selectedValueTwo,
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      selectedValueTwo = newValue!;
+                      if (selectedValueTwo == "Male") {
+                        selectedValueCattleStage = selectedValueCattleStageThree;
+                      } else if (selectedValueTwo == "Female") {
+                        selectedValueCattleStage = selectedValueCattleStageFour;
+                      }
+                    });
+                  },
+                  items: dropdownItemsTwo),
+              selectedValueTwo == "Select Gender. *"
+                  ? Container()
+                  : SizedBox(
+                      height: 20,
+                    ),
+              selectedValueTwo == "Select Gender. *"
+                  ? Container()
+                  : DropdownButtonFormField(
+                      style: TextStyle(fontSize: 16.0, color: Colors.black),
+                      icon: Icon(
+                        Icons.arrow_drop_down,
+                        size: 30,
+                      ),
+                      decoration: InputDecoration(
+                          contentPadding:
+                              EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                          //hintText: "Cattle name. *",
+                          //labelText: "Select Gender. *",
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5.0))),
+                      //dropdownColor: Colors.blueAccent,
+                      value: selectedValueCattleStage,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          selectedValueCattleStage = newValue!;
+                        });
+                      },
+                      items: dropdownItemsCattleStage),
+              SizedBox(
+                height: 20,
+              ),
+              TextFormField(
+                controller: cattleWeightController,
+                keyboardType: TextInputType.number,
+                validator: (input) => input!.length < 1 ? "Required" : null,
+                style: TextStyle(fontSize: 20.0),
+                decoration: InputDecoration(
+                    contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                    //hintText: "Cattle name. *",
+                    labelText: "Weight",
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0))),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              TextFormField(
+                controller: cattleDOBController,
+                validator: (input) => input!.length < 1 ? "Required" : null,
+                onTap: () {
+                  _selectTodoDate(context, 1);
                 },
-                items: dropdownItemsObtainMethod),
+                readOnly: true,
+                autofocus: false,
+                // enabled: false,
+                decoration: InputDecoration(
+                    //hintText: 'YY-MM-DD',
+        
+                    labelText: 'Date of birth',
+                    contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0)),
+                    prefixIcon: InkWell(
+                        onTap: () {
+                          //  _selectTodoDate(context);
+                        },
+                        child: Icon(Icons.calendar_today))),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              TextFormField(
+                controller: cattleDOEController,
+                validator: (input) => input!.length < 1 ? "Required" : null,
+                onTap: () {
+                  _selectTodoDate(context, 0);
+                },
+                readOnly: true,
+                autofocus: false,
+                // enabled: false,
+                decoration: InputDecoration(
+                    //hintText: 'YY-MM-DD',
+        
+                    labelText: 'Date of entry on the farm',
+                    contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0)),
+                    prefixIcon: InkWell(
+                        onTap: () {
+                          //  _selectTodoDate(context);
+                        },
+                        child: Icon(Icons.calendar_today))),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              DropdownButtonFormField(
+                  style: TextStyle(fontSize: 16.0, color: Colors.black),
+                  icon: Icon(
+                    Icons.arrow_drop_down,
+                    size: 30,
+                  ),
+                  decoration: InputDecoration(
+                      contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                      //hintText: "Cattle name. *",
+                      //labelText: "Select Gender. *",
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5.0))),
+                  //dropdownColor: Colors.blueAccent,
+                  value: selectedValueObtainMethod,
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      selectedValueObtainMethod = newValue!;
+                    });
+                  },
+                  items: dropdownItemsObtainMethod),
+              SizedBox(
+                height: 20,
+              ),
+              selectedValueObtainMethod == "Other"
+                  ? TextField(
+                      controller: sourceOfCattleController,
+                      style: TextStyle(fontSize: 20.0),
+                      decoration: InputDecoration(
+                          contentPadding:
+                              EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                          //hintText: "Cattle name. *",
+                          labelText: "Specify the source of cattle. *",
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5.0))),
+                    )
+                  : Container(),
+              selectedValueObtainMethod == "Other"
+                  ? SizedBox(
+                      height: 20,
+                    )
+                  : Container(),
+              TextFormField(
+                controller: cattleMotherTagNoController,
+                validator: (input) => input!.length < 1 ? "Required" : null,
+                style: TextStyle(fontSize: 20.0),
+                decoration: InputDecoration(
+                    contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                    //hintText: "Cattle name. *",
+                    labelText: "Mother's Tag No.",
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0))),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              TextFormField(
+                controller: cattleFatherTagNoController,
+                validator: (input) => input!.length < 1 ? "Required" : null,
+                style: TextStyle(fontSize: 20.0),
+                decoration: InputDecoration(
+                    contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                    //hintText: "Cattle name. *",
+                    labelText: "Father's Tag No.",
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0))),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              TextField(
+                controller: cattleNotesController,
+                minLines: 4,
+                maxLines: null,
+                style: TextStyle(fontSize: 20.0),
+                decoration: InputDecoration(
+                    contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                    //hintText: "Cattle name. *",
+                    labelText: "Write some notes ...",
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0))),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
-            SizedBox(
-              height: 20,
-            ),
+  _editCategoryDialog(BuildContext context) {
+    return showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (param) {
+          TextEditingController _cattleBreedName = TextEditingController();
+          return AlertDialog(
+            actions: <Widget>[
+              TextButton(
+                style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Colors.orange),
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  "CANCEL",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+              TextButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(
+                      Theme.of(context).colorScheme.primary),
+                ),
+                onPressed: () async {
+                  CattleBreedService breedService = CattleBreedService();
+                  var model = CattleBreedModel();
+                  model.cattleBreed = _cattleBreedName.text;
+                  var response = await breedService.saveCattle(model);
 
-            selectedValueObtainMethod == "Other"
-                ? TextField(
-                    controller: sourceOfCattleController,
+                  print("printing new list $newItems");
+
+                  if (response > 0) {
+                    newItems.clear();
+                    breedIdList.clear();
+                     await _getAllCattleBreed();
+    
+    
+                   
+                    print("check me $newItems");
+                    setState(() {
+                      checkValue = 1;
+                      dropdownvalue = _cattleBreedName.text;
+                      //newDropdownvalue = _cattleBreedName.text;
+                    });
+                  } else {
+                    print("failed");
+                  }
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  "ADD",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ],
+            title: Text("New Breed"),
+            content: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  TextField(
+                    controller: _cattleBreedName,
                     style: TextStyle(fontSize: 20.0),
                     decoration: InputDecoration(
                         contentPadding:
                             EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
                         //hintText: "Cattle name. *",
-                        labelText: "Specify the source of cattle. *",
+                        labelText: "Enter breed name ...",
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5.0))),
-                  )
-                : Container(),
-            selectedValueObtainMethod == "Other"
-                ? SizedBox(
-                    height: 20,
-                  )
-                : Container(),
-
-            TextField(
-              controller: cattleMotherTagNoController,
-              style: TextStyle(fontSize: 20.0),
-              decoration: InputDecoration(
-                  contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                  //hintText: "Cattle name. *",
-                  labelText: "Mother's Tag No.",
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5.0))),
+                  ),
+                ],
+              ),
             ),
-            SizedBox(
-              height: 20,
-            ),
-            TextField(
-              controller: cattleFatherTagNoController,
-              style: TextStyle(fontSize: 20.0),
-              decoration: InputDecoration(
-                  contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                  //hintText: "Cattle name. *",
-                  labelText: "Father's Tag No.",
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5.0))),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            TextField(
-              controller: cattleNotesController,
-              style: TextStyle(fontSize: 20.0),
-              decoration: InputDecoration(
-                  contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                  //hintText: "Cattle name. *",
-                  labelText: "Write some notes ...",
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5.0))),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-          ],
-        ),
-      ),
-    );
+          );
+        });
   }
 }

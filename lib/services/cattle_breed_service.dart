@@ -25,12 +25,12 @@ class CattleBreedService {
     return await _repository.getItemById("cattleBreed", cattleId);
   }
 
-  updateTodo(CattleBreedModel cattle) async {
+  updateCattle(CattleBreedModel cattle) async {
     return await _repository.updateItem("cattleBreed", cattle.createMap());
     
   }
 
-  deleteTodoById(cattleId) async {
+  deleteCattleBreedById(cattleId) async {
     return await _repository.deleteItemById("cattleBreed", cattleId);
   }
 

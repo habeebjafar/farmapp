@@ -1,5 +1,4 @@
 import 'package:farmapp/models/event_model.dart';
-import 'package:farmapp/models/milk_model.dart';
 import 'package:farmapp/repository/repository.dart';
 
 
@@ -26,12 +25,12 @@ class EventService {
     return await _repository.getItemById("event", eventModelId);
   }
 
-  updateTodo(EventModel eventModel) async {
+  updateEvent(EventModel eventModel) async {
     return await _repository.updateItem("event", eventModel.createMap());
     
   }
 
-  deleteTodoById(eventModelId) async {
+  deleteEventById(eventModelId) async {
     return await _repository.deleteItemById("event", eventModelId);
   }
 

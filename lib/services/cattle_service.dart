@@ -21,13 +21,18 @@ class CattleService {
 
   
 
-  getTodoById(cattleId) async {
+  getCattleById(cattleId) async {
     return await _repository.getItemById("cattle", cattleId);
   }
 
-  updateTodo(CattleModel cattle) async {
+  updateCattle(CattleModel cattle) async {
     return await _repository.updateItem("cattle", cattle.createMap());
     
+  }
+
+  updateCattleSingleField(conditionalColumn, colunmName, colunmValue, id) async{
+
+    return await _repository.updateSingleField("cattle", conditionalColumn, colunmName, colunmValue, id);
   }
 
   deleteTodoById(cattleId) async {

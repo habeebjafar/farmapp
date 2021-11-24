@@ -14,6 +14,7 @@ class DbConnection {
     await db.execute('''
     CREATE TABLE cattle(id INTEGER PRIMARY KEY AUTOINCREMENT,
      cattleBreed TEXT,
+     cattleBreedId TEXT,
      cattleName TEXT,
      cattleTagNo TEXT,
      cattleGender TEXT,
@@ -22,8 +23,15 @@ class DbConnection {
      cattleDOB TEXT,
      cattleDOE TEXT,
      cattleObtainMethod TEXT,
+     cattleOtherSource TEXT,
      cattleMotherTagNo TEXT,
      cattleFatherTagNo TEXT,
+     cattleStatus TEXT,
+     cattleArchive TEXT,
+     cattleArchiveReason TEXT,
+     cattleArchiveOtherReason TEXT,
+     cattleArchiveDate TEXT,
+     cattleArchiveNotes TEXT,
      cattleNotes TEXT)
     
     ''');
@@ -41,6 +49,7 @@ class DbConnection {
      milkTotalUsed TEXT,
      milkTotalProduced TEXT,
      cowMilked TEXT,
+     cattleId TEXT,
      noOfCattleMilked TEXT)
     
     ''');
@@ -70,12 +79,45 @@ class DbConnection {
      incomeDate TEXT,
      incomeType TEXT,
      milkQty TEXT,
-     incomeNotes TEXT,
+     selectedValueIncomeCategory TEXT,
+     incomeCategoryId TEXT,
+     otherSource TEXT,
      amountEarned TEXT,
+     receiptNo TEXT,
+     incomeNotes TEXT)
+    
+    ''');
+
+    await db.execute('''
+    CREATE TABLE incomeCategory(id INTEGER PRIMARY KEY AUTOINCREMENT,
+     incomeCategory TEXT)
+    
+    ''');
+
+    await db.execute('''
+    CREATE TABLE expenses(id INTEGER PRIMARY KEY AUTOINCREMENT,
+     expenseDate TEXT,
+     expenseType TEXT,
+     selectedValueExpenseCategory TEXT,
+     expenseCategoryId TEXT,
+     otherExpense TEXT,
+     expenseNotes TEXT,
+     amountSpent TEXT,
      receiptNo TEXT)
     
     ''');
 
-
+    await db.execute('''
+    CREATE TABLE expenseCategory(id INTEGER PRIMARY KEY AUTOINCREMENT,
+     expenseCategory TEXT)
+    
+    ''');
+    await db.execute('''
+    CREATE TABLE farmNotes(id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT,
+    date TEXT,
+    message TEXT)
+    
+    ''');
   }
 }
