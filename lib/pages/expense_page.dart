@@ -250,9 +250,9 @@ class _ExpensesPageState extends State<ExpensesPage> {
                   ),
                 ),
               ],
-              title: Text("Deleting Cattle!"),
+              title: Text("Deleting expense!"),
               content: Text(
-                  "This cattle will be deleted completely from the app. This will also permanently delete all records such milk, events, expenses and revenue attached to this cattle!"));
+                  "Are you sure you want to delete this expense?"));
         });
   }
 }

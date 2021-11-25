@@ -268,9 +268,9 @@ class _CattleBreedPageState extends State<CattleBreedPage> {
                   ),
                 ),
               ],
-              title: Text("Deleting Cattle!"),
+              title: Text("Deleting breed!"),
               content: Text(
-                  "This cattle will be deleted completely from the app. This will also permanently delete all records such milk, events, expenses and revenue attached to this cattle!"));
+                  "All cattle associated with this breed will have no breed attached to them. Please proceed with caution!"));
         });
   }
 }

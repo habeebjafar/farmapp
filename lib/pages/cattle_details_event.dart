@@ -332,9 +332,9 @@ class _CattleDetailsEventState extends State<CattleDetailsEvent> {
                   ),
                 ),
               ],
-              title: Text("Deleting Cattle!"),
+              title: Text("Deleting event!"),
               content: Text(
-                  "This cattle will be deleted completely from the app. This will also permanently delete all records such milk, events, expenses and revenue attached to this cattle!"));
+                  "Deleting this event will not revert any changes to the cattle's stage and status. Click delete to continue."));
         });
   }
 }

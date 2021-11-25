@@ -90,6 +90,22 @@ class _CattlePageState extends State<CattlePage> {
         ) : ListView.builder(
                     itemCount: newPro.cattleList.length,
                     itemBuilder: (BuildContext context, int index) {
+                      String? cattleStageImg;
+                      String? cattleStage = newPro.cattleList[index].cattleStage;
+
+                      if(cattleStage == "Bull"){
+                        cattleStageImg = "assets/images/bull.png";
+                      } else if(cattleStage == "Cow"){
+                        cattleStageImg = "assets/images/cowstage.png";
+                      }  else if(cattleStage == "Calf"){
+                        cattleStageImg = "assets/images/calf.png";
+                      } else{
+                        cattleStageImg = "assets/images/cownew.png";
+
+                      }
+
+                      
+
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 6),
                         child: GestureDetector(
@@ -113,7 +129,7 @@ class _CattlePageState extends State<CattlePage> {
                                       Row(
                                         children: [
                                           Image.asset(
-                                            "assets/images/cowlist.png",
+                                            cattleStageImg,
                                             width: 70,
                                             height: 70,
                                           ),

@@ -291,9 +291,9 @@ class _MilkRecordPageState extends State<MilkRecordPage> {
                   ),
                 ),
               ],
-              title: Text("Deleting Cattle!"),
+              title: Text("Deleting milk!"),
               content: Text(
-                  "This cattle will be deleted completely from the app. This will also permanently delete all records such milk, events, expenses and revenue attached to this cattle!"));
+                  "This milk record will be deleted permanently! Do you wish to continue?"));
         });
   }
 }

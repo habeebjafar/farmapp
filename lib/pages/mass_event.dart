@@ -305,9 +305,9 @@ class _MassEventState extends State<MassEvent> {
                   ),
                 ),
               ],
-              title: Text("Deleting Cattle!"),
+              title: Text("Deleting event!"),
               content: Text(
-                  "This cattle will be deleted completely from the app. This will also permanently delete all records such milk, events, expenses and revenue attached to this cattle!"));
+                  "This mass event will be completely deleted. Click delete to continue."));
         });
   }
 

@@ -40,10 +40,10 @@ class _HomePageState extends State<HomePage> {
                   accountEmail: Text('support@farmdiary.com'),
                   currentAccountPicture: GestureDetector(
                     child: CircleAvatar(
-                      backgroundColor: Colors.black,
+                      backgroundColor: Theme.of(context).primaryColor,
                       radius: 100,
                       child: Image.asset(
-                        "assets/images/cow2.png",
+                        "assets/images/cowlogo.png",
                         width: 100,
                         height: 100,
                       ),

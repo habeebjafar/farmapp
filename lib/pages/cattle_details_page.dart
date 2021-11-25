@@ -1,7 +1,6 @@
 import 'package:farmapp/pages/cattle_details_event.dart';
 import 'package:farmapp/pages/cattle_details_general.dart.dart';
 import 'package:farmapp/pages/cattle_form_page.dart';
-import 'package:farmapp/pages/cattle_page.dart';
 import 'package:farmapp/provider/cattle_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -115,12 +114,12 @@ class _CattleDetailsPageState extends State<CattleDetailsPage> {
                         bottom: 45,
                         top: 45,
                         child: CircleAvatar(
-                          backgroundColor: Colors.black,
-                          radius: 100,
+                          backgroundColor: Theme.of(context).primaryColor,
+                          radius: 30,
                           child: Image.asset(
-                            "assets/images/cow2.png",
-                            width: 100,
-                            height: 100,
+                            "assets/images/cowlogo.png",
+                            width: 80,
+                            height: 80,
                           ),
                         ),
                       ),
@@ -287,46 +286,46 @@ class _CattleDetailsPageState extends State<CattleDetailsPage> {
               ],
             ),
           ),
-        PopupMenuItem(
-          value: "Weight Report",
-          child: Row(
-            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Icon(
-                Icons.masks_sharp,
-                color: Colors.orange,
-              ),
-              SizedBox(
-                width: 15,
-              ),
-              Text("Weight Report"),
-              SizedBox(
-                width: 35,
-              ),
-            ],
-          ),
-        ),
-        PopupMenuItem(
-          value: "Print PDF",
-          child: Row(
-            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Icon(
-                Icons.masks_sharp,
-                color: Colors.orange,
-              ),
-              SizedBox(
-                width: 15,
-              ),
-              Text("Print PDF"),
-              SizedBox(
-                width: 35,
-              ),
-            ],
-          ),
-        ),
+        // PopupMenuItem(
+        //   value: "Weight Report",
+        //   child: Row(
+        //     // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //     mainAxisSize: MainAxisSize.max,
+        //     children: [
+        //       Icon(
+        //         Icons.masks_sharp,
+        //         color: Colors.orange,
+        //       ),
+        //       SizedBox(
+        //         width: 15,
+        //       ),
+        //       Text("Weight Report"),
+        //       SizedBox(
+        //         width: 35,
+        //       ),
+        //     ],
+        //   ),
+        // ),
+        // PopupMenuItem(
+        //   value: "Print PDF",
+        //   child: Row(
+        //     // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //     mainAxisSize: MainAxisSize.max,
+        //     children: [
+        //       Icon(
+        //         Icons.masks_sharp,
+        //         color: Colors.orange,
+        //       ),
+        //       SizedBox(
+        //         width: 15,
+        //       ),
+        //       Text("Print PDF"),
+        //       SizedBox(
+        //         width: 35,
+        //       ),
+        //     ],
+        //   ),
+        // ),
         PopupMenuItem(
           value:
               "${_groupSelectedValue = provider.singleCattle[0]['cattleArchive'] == 'All Active' ? 'Archive Cattle' : 'Unarchive Cattle'}",
@@ -471,7 +470,7 @@ class _CattleDetailsPageState extends State<CattleDetailsPage> {
               ],
               title: Text("Unrchiving Cattle"),
               content: Text(
-                  "This cattle will be brought back to the list of active farm cattle. Click okey to continue!"));
+                  "This cattle will be brought back to the list of active farm cattle. Click okay to continue!"));
         });
   }
 
@@ -526,7 +525,7 @@ class _CattleDetailsPageState extends State<CattleDetailsPage> {
               ],
               title: Text("Deleting Cattle!"),
               content: Text(
-                  "This cattle will be deleted completely from the app. This will also permanently delete all records such milk, events, expenses and revenue attached to this cattle!"));
+                  "This cattle will be deleted completely from the app. This will also permanently delete all records such as milk, events, expenses and revenue attached to this cattle!"));
         });
   }
 
