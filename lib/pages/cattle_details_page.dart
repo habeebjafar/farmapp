@@ -114,10 +114,10 @@ class _CattleDetailsPageState extends State<CattleDetailsPage> {
                         bottom: 45,
                         top: 45,
                         child: CircleAvatar(
-                          backgroundColor: Theme.of(context).primaryColor,
+                          backgroundColor: Colors.white,
                           radius: 30,
                           child: Image.asset(
-                            "assets/images/cowlogo.png",
+                            "${provider.singleCattle[0]['cattleStageImg']}",
                             width: 80,
                             height: 80,
                           ),

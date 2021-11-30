@@ -49,6 +49,20 @@ class CattleProvider with ChangeNotifier {
       cattleArchiveNotes,
       int id,
       int index) async {
+
+        String? cattleStageImg;
+                     
+
+                      if(cattleStage == "Bull"){
+                        cattleStageImg = "assets/images/bull.png";
+                      } else if(cattleStage == "Cow"){
+                        cattleStageImg = "assets/images/cowstage.png";
+                      }  else if(cattleStage == "Calf"){
+                        cattleStageImg = "assets/images/calf.png";
+                      } else{
+                        cattleStageImg = "assets/images/cownew.png";
+
+                      }
     var model = CattleModel();
     model.cattleBreed = cattleBreed.toString();
     model.cattleBreedId = cattleBreedId;
@@ -56,6 +70,7 @@ class CattleProvider with ChangeNotifier {
     model.cattleTagNo = cattleTagNo;
     model.cattleGender = cattleGender;
     model.cattleStage = cattleStage;
+    model.cattleStageImg = cattleStageImg;
     model.cattleWeight = cattleWeight;
     model.cattleDOB = cattleDOB;
     model.cattleDOE = cattleDOE;
@@ -118,6 +133,7 @@ class CattleProvider with ChangeNotifier {
       model.cattleTagNo = data['cattleTagNo'];
       model.cattleGender = data['cattleGender'];
       model.cattleStage = data['cattleStage'];
+      model.cattleStageImg = data['cattleStageImg'];
       model.cattleBreed = data['cattleBreed'];
       model.cattleBreedId = data['cattleBreedId'];
       model.cattleWeight = data['cattleWeight'];

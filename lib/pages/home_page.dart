@@ -6,8 +6,10 @@ import 'package:farmapp/pages/farm_setup_page.dart';
 import 'package:farmapp/pages/login_page.dart';
 import 'package:farmapp/pages/milk_record_page.dart';
 import 'package:farmapp/pages/milk_report_page.dart';
+import 'package:farmapp/pages/pie_chart_page.dart';
 import 'package:farmapp/pages/report_page.dart';
 import 'package:farmapp/pages/transaction_page.dart';
+import 'package:farmapp/pages/transactions_report_page.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -26,7 +28,7 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("My Farm Dairy"),
+        title: Text("The Brand Marketing"),
       ),
       drawer: Container(
           color: Colors.black,
@@ -36,18 +38,16 @@ class _HomePageState extends State<HomePage> {
               padding: EdgeInsets.zero,
               children: <Widget>[
                 UserAccountsDrawerHeader(
-                  accountName: Text('My Farm Diary'),
-                  accountEmail: Text('support@farmdiary.com'),
+                  accountName: Text('The Brand Marketing'),
+                  accountEmail: Text('support@thebrandmarketing.net'),
+                  currentAccountPictureSize: const Size.square(80),
                   currentAccountPicture: GestureDetector(
-                    child: CircleAvatar(
-                      backgroundColor: Theme.of(context).primaryColor,
-                      radius: 100,
-                      child: Image.asset(
-                        "assets/images/cowlogo.png",
-                        width: 100,
-                        height: 100,
+                    child: Image.asset(
+                        "assets/images/cattlec.png",
+                       width: 150,
+                       height: 150,
                       ),
-                    ),
+
                   ),
                 ),
                 // Divider(
@@ -55,31 +55,39 @@ class _HomePageState extends State<HomePage> {
                 //   thickness: 1,
                 // ),
 
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text(
-                    'Want more features?',
-                  ),
-                ),
-                ListTile(
-                  leading: Icon(Icons.favorite),
-                  title: Text('Go Premium'),
-                  selected: _selectedDestination == 0,
-                  //onTap: () => selectDestination(0),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.all(16.0),
+                //   child: Text(
+                //     'Want more features?',
+                //   ),
+                // ),
+                // ListTile(
+                //   leading: Icon(Icons.favorite),
+                //   title: Text('Go Premium'),
+                //   selected: _selectedDestination == 0,
+                //   //onTap: () => selectDestination(0),
+                // ),
 
-                Divider(
-                  height: 1,
-                  thickness: 2,
-                ),
+                // Divider(
+                //   height: 1,
+                //   thickness: 2,
+                // ),
+                // Padding(
+                //   padding: const EdgeInsets.all(16.0),
+                //   child: Text(
+                //     'Premium Only',
+                //   ),
+                // ),
+
+               
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Text(
-                    'Premium Only',
+                    'Reports',
                   ),
                 ),
                 ListTile(
-                  leading: Icon(Icons.my_library_books),
+                  leading: Icon(Icons.my_library_books_rounded),
                   title: Text('Milk Report'),
                   selected: _selectedDestination == 3,
                   onTap: () {
@@ -90,14 +98,38 @@ class _HomePageState extends State<HomePage> {
                   // onTap: () => selectDestination(3),
                 ),
                 ListTile(
-                  leading: Icon(Icons.event),
-                  title: Text('Event Report'),
+                  leading: Icon(Icons.my_library_books),
+                  title: Text('Events Report'),
                   selected: _selectedDestination == 1,
                   //onTap: () => selectDestination(1),
                   onTap: () {
                     Navigator.pop(context);
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => EventsReportPage()));
+                  },
+                ),
+
+                 ListTile(
+                  leading: Icon(Icons.event_available),
+                  title: Text('Cattle Report'),
+                  selected: _selectedDestination == 1,
+                  //onTap: () => selectDestination(1),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => PieChartSample2()));
+                  },
+                ),
+
+                 ListTile(
+                  leading: Icon(Icons.event_available_outlined),
+                  title: Text('Transaction'),
+                  selected: _selectedDestination == 1,
+                  //onTap: () => selectDestination(1),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => TransactionReportPage()));
                   },
                 ),
                 // ListTile(
@@ -167,31 +199,41 @@ class _HomePageState extends State<HomePage> {
 
                 ListTile(
                   leading: Icon(Icons.share_sharp),
-                  title: Text('Share Via Whatsapp'),
+                  title: Text('Share'),
                   selected: _selectedDestination == 1,
                   onTap: (){
                      Navigator.pop(context);
-                    Share.share('check out my website https://example.com', subject: 'Look what I made!');
+                    Share.share(''' 
+
+                    A powerful app for livestock farming. Track cattle, events, milk production and revenue. \n\n
+
+Click on the Link below to download it from App Store. \n\n
+
+https://apps.apple.com/us/app/track-my-brand/id1597499479
+                    
+                    
+                    ''', 
+                    subject: 'The Brand Marketing');
                   }
                 ),
-                ListTile(
-                  leading: Icon(Icons.policy),
-                  title: Text('Privacy Policy'),
-                  selected: _selectedDestination == 2,
-                  //onTap: () => selectDestination(2),
-                ),
-                ListTile(
-                  leading: Icon(Icons.help),
-                  title: Text('User Guide/Manual'),
-                  selected: _selectedDestination == 2,
-                  //onTap: () => selectDestination(2),
-                ),
-                ListTile(
-                  leading: Icon(Icons.feedback),
-                  title: Text('Help & Feedback'),
-                  selected: _selectedDestination == 2,
-                  //onTap: () => selectDestination(2),
-                ),
+                // ListTile(
+                //   leading: Icon(Icons.policy),
+                //   title: Text('Privacy Policy'),
+                //   selected: _selectedDestination == 2,
+                //   //onTap: () => selectDestination(2),
+                // ),
+                // ListTile(
+                //   leading: Icon(Icons.help),
+                //   title: Text('User Guide/Manual'),
+                //   selected: _selectedDestination == 2,
+                //   //onTap: () => selectDestination(2),
+                // ),
+                // ListTile(
+                //   leading: Icon(Icons.feedback),
+                //   title: Text('Help & Feedback'),
+                //   selected: _selectedDestination == 2,
+                //   //onTap: () => selectDestination(2),
+                // ),
               ],
             ),
           )),

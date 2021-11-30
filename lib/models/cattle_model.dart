@@ -8,6 +8,7 @@ class CattleModel {
   String? cattleTagNo;
   String? cattleGender;
   String? cattleStage;
+  String? cattleStageImg;
   String? cattleWeight;
   String? cattleDOB;
   String? cattleDOE;
@@ -32,6 +33,7 @@ class CattleModel {
       "cattleTagNo": this.cattleTagNo,
       "cattleGender": this.cattleGender,
       "cattleStage": this.cattleStage,
+       "cattleStageImg": this.cattleStageImg,
       "cattleWeight": this.cattleWeight,
       "cattleDOB": this.cattleDOB,
       "cattleDOE": this.cattleDOE,

@@ -183,9 +183,11 @@ class _CattleFormPageState extends State<CattleFormPage> {
       newItems.insert(newItems.length, "Other (Specify)");
       breedIdList.insert(0, "0");
       breedIdList.insert(breedIdList.length, "1000000");
-      dropdownvalue = this.widget.index != -1
-              ? provider.singleCattle[0]['cattleBreed']!
-              : newItems.first.toString();
+      dropdownvalue = newItems.first.toString();
+
+              //  dropdownvalue = this.widget.index != -1
+              // ? provider.singleCattle[0]['cattleBreed']!
+              // : newItems.first.toString();
      // cattleBreedId = breedIdList[newItems.indexOf(dropdownvalue)];
     });
 
@@ -196,6 +198,7 @@ class _CattleFormPageState extends State<CattleFormPage> {
     if (this.widget.index != -1) {
       var cattleBreed = provider.singleCattle[0]['cattleBreed'].toString();
       setState(() {
+         dropdownvalue =  provider.singleCattle[0]['cattleBreed']!;
         cattleDOBController.text =
             provider.singleCattle[0]['cattleDOB'].toString();
         cattleDOEController.text =

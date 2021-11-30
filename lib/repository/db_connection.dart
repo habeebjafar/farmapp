@@ -19,6 +19,7 @@ class DbConnection {
      cattleTagNo TEXT,
      cattleGender TEXT,
      cattleStage TEXT,
+     cattleStageImg TEXT,
      cattleWeight TEXT,
      cattleDOB TEXT,
      cattleDOE TEXT,
