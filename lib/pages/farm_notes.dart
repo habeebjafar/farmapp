@@ -39,7 +39,13 @@ class _FarmNoteState extends State<FarmNote> {
               );
             } else {
               return Consumer<FarmNoteProvider>(
-                  builder: (_, provider, __) => ListView.builder(
+                  builder: (_, provider, __) =>  provider.farmNoteList.length == 0 ? Center(
+          child: Text("No note added yet!",
+          style: TextStyle(
+            fontSize: 18,
+            color: Colors.orange
+          ),)
+        ) : ListView.builder(
                       itemCount: provider.farmNoteList.length,
                       itemBuilder: (BuildContext context, index) {
                         var date = DateFormat('dd MMM, yyyy (hh:mm)').format(
