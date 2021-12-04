@@ -24,7 +24,7 @@ class _TransactiontPageState extends State<TransactiontPage> {
             toolbarHeight: 100,
             title: Text("Transactions"),
             bottom: PreferredSize(
-              preferredSize: Size.infinite,
+              preferredSize: Size.zero,
               child: Container(
                 color: Colors.white,
                 child: TabBar(

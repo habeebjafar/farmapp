@@ -135,7 +135,7 @@ class _CattleDetailsPageState extends State<CattleDetailsPage> {
                   ),
 
                   bottom: PreferredSize(
-                    preferredSize: Size.infinite,
+                    preferredSize: Size.zero,
                     child: Container(
                       color: Colors.white,
                       child: TabBar(

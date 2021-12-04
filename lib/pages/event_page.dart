@@ -24,7 +24,7 @@ class _EventPageState extends State<EventPage> {
             toolbarHeight: 100,
             title: Text("Events"),
             bottom: PreferredSize(
-              preferredSize: Size.infinite,
+              preferredSize: Size.zero,
               child: Container(
                 color: Colors.white,
                 child: TabBar(
