@@ -3,7 +3,6 @@ import 'package:farmapp/pages/event_page.dart';
 import 'package:farmapp/pages/events_report_page.dart';
 import 'package:farmapp/pages/farm_notes.dart';
 import 'package:farmapp/pages/farm_setup_page.dart';
-import 'package:farmapp/pages/login_page.dart';
 import 'package:farmapp/pages/milk_record_page.dart';
 import 'package:farmapp/pages/milk_report_page.dart';
 import 'package:farmapp/pages/pie_chart_page.dart';
@@ -23,8 +22,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
 
     return Scaffold(
       appBar: AppBar(
@@ -244,7 +241,7 @@ https://apps.apple.com/us/app/track-my-brand/id1597499479
               width: MediaQuery.of(context).size.width,
               height: 150,
               decoration: BoxDecoration(
-                color: Theme.of(context).accentColor,
+                color: Theme.of(context).colorScheme.secondary,
                 borderRadius: BorderRadius.only(
                     bottomRight: Radius.elliptical(200, 50),
                     bottomLeft: Radius.elliptical(200, 50)),

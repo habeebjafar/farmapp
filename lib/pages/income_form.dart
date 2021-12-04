@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class IncomeForm extends StatefulWidget {
-  var index;
+  final index;
   IncomeForm({this.index});
   @override
   _IncomeFormState createState() => _IncomeFormState();

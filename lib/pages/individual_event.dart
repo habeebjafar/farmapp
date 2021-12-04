@@ -1,10 +1,7 @@
-import 'package:farmapp/models/event_individual_model.dart';
-import 'package:farmapp/provider/cattle_provider.dart';
 import 'package:farmapp/provider/events_provider.dart';
 import 'package:farmapp/services/event_individual_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import 'cattle_details_page.dart';

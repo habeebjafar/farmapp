@@ -22,10 +22,6 @@ class _PopupMenuState extends State<PopupMenu> {
     });
   }
 
- static String? selectedPopup(){
-    
-    return _groupSelectedValue;
-  }
 
   @override
   Widget build(BuildContext context) {

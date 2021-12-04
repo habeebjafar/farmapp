@@ -1,5 +1,4 @@
 import 'package:farmapp/models/event_individual_model.dart';
-import 'package:farmapp/models/event_model.dart';
 import 'package:farmapp/repository/repository.dart';
 
 

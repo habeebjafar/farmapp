@@ -1,4 +1,3 @@
-import 'package:farmapp/models/cattle_model.dart';
 import 'package:farmapp/pages/cattle_details_page.dart';
 import 'package:farmapp/provider/cattle_provider.dart';
 import 'package:flutter/cupertino.dart';

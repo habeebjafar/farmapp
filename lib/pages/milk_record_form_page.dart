@@ -2,8 +2,6 @@ import 'package:farmapp/models/cattle_model.dart';
 import 'package:farmapp/models/milk_model.dart';
 import 'package:farmapp/provider/milk_provider.dart';
 import 'package:farmapp/services/cattle_service.dart';
-
-import 'package:farmapp/services/milk_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -93,7 +91,6 @@ class _MilkFormPageState extends State<MilkFormPage> {
   String selectedValue = "-Select milk type-";
   String selectedCowValue = "-Select cow milked-";
 
-  MilkService _milkService = MilkService();
   //List<String> mylist = [];
 
   List<DropdownMenuItem<String>> get dropdownItems {
@@ -140,15 +137,12 @@ class _MilkFormPageState extends State<MilkFormPage> {
         milkModel.cattleId = selectedValue == "Individual Milk" ? _cattleIdList[_cattleMilkedList.indexOf(dropdownvalue)] : "";
        milkModel.noOfCattleMilked = selectedValue == "Bulk Milk" ? noOfCattleMilkedController.text : "";
 
-    var response;
 
     if (this.widget.index != null) {
       var provider = Provider.of<MilkProvider>(context, listen: false);
       milkModel.id =   provider.milkRecordList[this.widget.index].id!;
 
-      response = await _milkService.updateMilk(milkModel);
     } else {
-      response = await _milkService.saveMilk(milkModel);
     }
 
     // if (response > 0) {

@@ -1,12 +1,6 @@
-import 'package:farmapp/models/cattle_model.dart';
-import 'package:farmapp/models/event_model.dart';
-import 'package:farmapp/models/milk_model.dart';
 import 'package:farmapp/pages/mass_event_form.dart';
-import 'package:farmapp/pages/milk_record_form_page.dart';
 import 'package:farmapp/provider/events_provider.dart';
-import 'package:farmapp/services/cattle_service.dart';
 import 'package:farmapp/services/event_service.dart';
-import 'package:farmapp/services/milk_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';

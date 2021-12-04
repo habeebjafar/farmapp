@@ -17,7 +17,6 @@ class _FarmNoteSearchState extends State<FarmNoteSearch> {
 
 
   FarmNoteService _service = FarmNoteService();
-  TextEditingController _farmNoteSearch = TextEditingController();
 
    @override
   void initState() {

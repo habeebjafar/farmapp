@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 import 'expense_category_page.dart';
 
 class ExpensesForm extends StatefulWidget {
-  var index;
+  final index;
   ExpensesForm({this.index});
   @override
   _ExpensesFormState createState() => _ExpensesFormState();

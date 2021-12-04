@@ -9,7 +9,6 @@ class FarmNoteProvider with ChangeNotifier {
 
   Future<bool> saveFarmNote(title, message, {updateId}) async {
     var date = DateTime.now();
-    var time = TimeOfDay.now();
     var response;
     var model = FarmNoteModel();
     model.title = title;

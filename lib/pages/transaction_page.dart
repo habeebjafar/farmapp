@@ -1,7 +1,6 @@
 
 import 'package:farmapp/pages/income_page.dart';
-import 'package:farmapp/pages/individual_event.dart';
-import 'package:farmapp/pages/mass_event.dart';
+
 import 'package:flutter/material.dart';
 
 import 'expense_page.dart';

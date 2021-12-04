@@ -42,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget _uiSetup(BuildContext context){
 
     return Scaffold(
-      backgroundColor: Theme.of(context).accentColor,
+      backgroundColor: Theme.of(context).colorScheme.secondary,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -85,20 +85,20 @@ class _LoginPageState extends State<LoginPage> {
                               hintText: "Email Address",
                               enabledBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: Theme.of(context).accentColor.withOpacity(0.2)
+                                  color: Theme.of(context).colorScheme.secondary.withOpacity(0.2)
                                 )
 
                               ),
                               focusedBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: Theme.of(context).accentColor,
+                                  color: Theme.of(context).colorScheme.secondary,
                                   
                                 ),
                                 
                               ),
                               prefixIcon: Icon(
                                 Icons.email,
-                                color: Theme.of(context).accentColor,
+                                color: Theme.of(context).colorScheme.secondary,
                               )
                             ),
                           ),
@@ -117,20 +117,20 @@ class _LoginPageState extends State<LoginPage> {
                               hintText: "Password",
                               enabledBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: Theme.of(context).accentColor.withOpacity(0.2)
+                                  color: Theme.of(context).colorScheme.secondary.withOpacity(0.2)
                                 )
 
                               ),
                               focusedBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: Theme.of(context).accentColor,
+                                  color: Theme.of(context).colorScheme.secondary,
                                   
                                 ),
                                 
                               ),
                               prefixIcon: Icon(
                                 Icons.lock,
-                                color: Theme.of(context).accentColor,
+                                color: Theme.of(context).colorScheme.secondary,
                               ), 
                               suffixIcon: IconButton(
                                 icon: Icon(
@@ -141,7 +141,7 @@ class _LoginPageState extends State<LoginPage> {
                                   hidePassword = !hidePassword;
                                 });
                               },
-                              color: Theme.of(context).accentColor.withOpacity(0.4),
+                              color: Theme.of(context).colorScheme.secondary.withOpacity(0.4),
                               )
                             ),
                           ),
@@ -193,7 +193,7 @@ class _LoginPageState extends State<LoginPage> {
                               "Login",
                               style: TextStyle(color: Colors.white),
                             ),
-                            color: Theme.of(context).accentColor,
+                            color: Theme.of(context).colorScheme.secondary,
                             shape: StadiumBorder(),
                             ),
                             SizedBox(height: 15,)

@@ -1,8 +1,6 @@
 import 'package:farmapp/models/event_model.dart';
-import 'package:farmapp/pages/event_page.dart';
 import 'package:farmapp/pages/mass_event.dart';
 import 'package:farmapp/provider/events_provider.dart';
-import 'package:farmapp/services/cattle_breed_service.dart';
 import 'package:farmapp/services/event_service.dart';
 
 import 'package:flutter/material.dart';

@@ -1,11 +1,8 @@
 import 'package:farmapp/models/cattle_model.dart';
-import 'package:farmapp/pages/cattle_breed_page.dart';
 import 'package:farmapp/pages/cattle_details_page.dart';
 import 'package:farmapp/pages/cattle_form_page.dart';
-import 'package:farmapp/pages/search.dart';
 import 'package:farmapp/pages/search_implementation.dart';
 import 'package:farmapp/provider/cattle_provider.dart';
-import 'package:farmapp/services/cattle_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

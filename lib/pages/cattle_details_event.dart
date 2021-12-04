@@ -4,7 +4,6 @@ import 'package:farmapp/provider/events_provider.dart';
 import 'package:farmapp/services/event_individual_service.dart';
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class CattleDetailsEvent extends StatefulWidget {
@@ -35,8 +34,6 @@ class _CattleDetailsEventState extends State<CattleDetailsEvent> {
           future: eventProvider.getAllIndividualEventRecord(
               cattleId: this.widget.index),
           builder: (BuildContext context, snapShot) {
-            var dob = DateFormat('yyyy MMM, dd').format(
-                DateTime.parse("${provider.singleCattle[0]['cattleDOB']}"));
             if (snapShot.connectionState == ConnectionState.waiting) {
               return Scaffold(
                 body: Center(
