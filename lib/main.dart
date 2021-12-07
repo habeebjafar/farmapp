@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
         child: MaterialApp(
-          title: 'The Brand Marketing',        
+          title: 'Tracking',        
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             // This is the theme of your application.

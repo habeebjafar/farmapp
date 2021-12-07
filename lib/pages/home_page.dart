@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("The Brand Marketing"),
+        title: Text("Tracking"),
       ),
       drawer: Container(
           color: Colors.black,
@@ -35,15 +35,18 @@ class _HomePageState extends State<HomePage> {
               padding: EdgeInsets.zero,
               children: <Widget>[
                 UserAccountsDrawerHeader(
-                  accountName: Text('The Brand Marketing'),
+                  accountName: Text('Tracking'),
                   accountEmail: Text('support@thebrandmarketing.net'),
                   currentAccountPictureSize: const Size.square(80),
                   currentAccountPicture: GestureDetector(
-                    child: Image.asset(
-                        "assets/images/cattlec.png",
-                       width: 150,
-                       height: 150,
-                      ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(150),
+                      child: Image.asset(
+                          "assets/images/brand.jpg",
+                         width: 200,
+                         height: 200,
+                        ),
+                    ),
 
                   ),
                 ),
@@ -83,17 +86,17 @@ class _HomePageState extends State<HomePage> {
                     'Reports',
                   ),
                 ),
-                ListTile(
-                  leading: Icon(Icons.my_library_books_rounded),
-                  title: Text('Milk Report'),
-                  selected: _selectedDestination == 3,
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => MilkReportPage()));
-                  },
-                  // onTap: () => selectDestination(3),
-                ),
+                // ListTile(
+                //   leading: Icon(Icons.my_library_books_rounded),
+                //   title: Text('Milk Report'),
+                //   selected: _selectedDestination == 3,
+                //   onTap: () {
+                //     Navigator.pop(context);
+                //     Navigator.push(context,
+                //         MaterialPageRoute(builder: (context) => MilkReportPage()));
+                //   },
+                //   // onTap: () => selectDestination(3),
+                // ),
                 ListTile(
                   leading: Icon(Icons.my_library_books),
                   title: Text('Events Report'),
@@ -293,52 +296,8 @@ https://apps.apple.com/us/app/track-my-brand/id1597499479
                             )),
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => MilkRecordPage()));
-                      },
-                      child: Card(
-                        elevation: 10,
-                        child: Container(
-                            width: 160,
-                            height: 180,
-                            child: Center(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    "assets/images/milk.png",
-                                    width: 100,
-                                    height: 100,
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Text(
-                                    "Milk Records",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      // fontWeight: FontWeight.w800
-                                    ),
-                                  )
-                                ],
-                              ),
-                            )),
-                      ),
-                    ),
-                  ],
-                ),
-                // SizedBox(height: 0.5,),
 
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    GestureDetector(
+                         GestureDetector(
                       onTap: () {
                         Navigator.push(
                             context,
@@ -374,6 +333,51 @@ https://apps.apple.com/us/app/track-my-brand/id1597499479
                             )),
                       ),
                     ),
+                    // GestureDetector(
+                    //   onTap: () {
+                    //     Navigator.push(
+                    //         context,
+                    //         MaterialPageRoute(
+                    //             builder: (context) => MilkRecordPage()));
+                    //   },
+                    //   child: Card(
+                    //     elevation: 10,
+                    //     child: Container(
+                    //         width: 160,
+                    //         height: 180,
+                    //         child: Center(
+                    //           child: Column(
+                    //             crossAxisAlignment: CrossAxisAlignment.center,
+                    //             mainAxisAlignment: MainAxisAlignment.center,
+                    //             children: [
+                    //               Image.asset(
+                    //                 "assets/images/milk.png",
+                    //                 width: 100,
+                    //                 height: 100,
+                    //               ),
+                    //               SizedBox(
+                    //                 height: 10,
+                    //               ),
+                    //               Text(
+                    //                 "Milk Records",
+                    //                 style: TextStyle(
+                    //                   fontSize: 16,
+                    //                   // fontWeight: FontWeight.w800
+                    //                 ),
+                    //               )
+                    //             ],
+                    //           ),
+                    //         )),
+                    //   ),
+                    // ),
+                  ],
+                ),
+                // SizedBox(height: 0.5,),
+
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
                     GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -410,14 +414,8 @@ https://apps.apple.com/us/app/track-my-brand/id1597499479
                             )),
                       ),
                     ),
-                  ],
-                ),
 
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    GestureDetector(
+                            GestureDetector(
                       onTap: () {
                         Navigator.push(
                             context,
@@ -453,6 +451,13 @@ https://apps.apple.com/us/app/track-my-brand/id1597499479
                             )),
                       ),
                     ),
+                  ],
+                ),
+
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
                     GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -489,6 +494,13 @@ https://apps.apple.com/us/app/track-my-brand/id1597499479
                             )),
                       ),
                     ),
+
+                            SizedBox(
+                                width: 160,
+                                height: 180,
+                               
+                                
+                                ),
                   ],
                 ),
 
